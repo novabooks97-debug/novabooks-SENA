@@ -1,0 +1,169 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test de Transiciones</title>
+  <link rel="stylesheet" href="./index.css">
+  <script src="./page-transitions.js"></script>
+  <style>
+    .test-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 4px;
+      border-left: 4px solid #39ff14;
+    }
+    .test-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 15px 0;
+    }
+    .test-link {
+      padding: 10px 15px;
+      background: #39ff14;
+      color: #0b0f0c;
+      text-decoration: none;
+      border-radius: 4px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .test-link:hover {
+      transform: scale(1.05);
+    }
+    code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-family: monospace;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .status.ok {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>🧪 Test de Sistema de Transiciones</h1>
+    
+    <div class="test-section">
+      <h2>Estado del Sistema</h2>
+      <div id="status" class="status ok">✅ Sistema cargado correctamente</div>
+      <p>Script: <code>page-transitions.js</code></p>
+      <p>Tipo: Fade + Slide</p>
+      <p>Duración: 500ms</p>
+      <p>Color: #0b0f0c (Oscuro)</p>
+    </div>
+
+    <div class="test-section">
+      <h2>Instrucciones de Test</h2>
+      <ol>
+        <li>Haz clic en cualquiera de los enlaces de abajo</li>
+        <li>Observa la animación de transición</li>
+        <li>Verifica que se muestre una capa oscura con animación suave</li>
+        <li>La página debe cargar después de la animación</li>
+        <li>La página nueva debe mostrar animación de entrada</li>
+      </ol>
+    </div>
+
+    <div class="test-section">
+      <h2>Links de Prueba (Internos)</h2>
+      <p>Estos enlaces disparan transiciones:</p>
+      <div class="test-links">
+        <a href="./index.html" class="test-link">Inicio</a>
+        <a href="./libros.html" class="test-link">Libros</a>
+        <a href="./comentarios.html" class="test-link">Comentarios</a>
+        <a href="./contactanos.html" class="test-link">Contacto</a>
+        <a href="./favoritos.html" class="test-link">Favoritos</a>
+        <a href="./para_leer_despues.html" class="test-link">Leer Después</a>
+        <a href="./iniciar sesion.html" class="test-link">Login</a>
+        <a href="./registrarse.html" class="test-link">Registro</a>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>Links de Control</h2>
+      <p>Estos links NO disparan transiciones (por diseño):</p>
+      <div class="test-links">
+        <a href="https://google.com" class="test-link" style="background: #ccc; color: #666;">Google (Externo)</a>
+        <a href="#seccion1" class="test-link" style="background: #ccc; color: #666;">Ancla (#)</a>
+        <a href="https://google.com" target="_blank" class="test-link" style="background: #ccc; color: #666;">Nueva pestaña</a>
+      </div>
+    </div>
+
+    <div class="test-section">
+      <h2>Qué esperar</h2>
+      <ul>
+        <li>Al hacer clic, verás una animación suave que oscurece la pantalla</li>
+        <li>La animación combina fade (desvanecimiento) con slide (deslizamiento suave)</li>
+        <li>Debe durar aproximadamente 0.5 segundos (500ms)</li>
+        <li>Después, la página nueva se carga y entra con animación</li>
+        <li>No hay interrupciones ni pantallazos</li>
+      </ul>
+    </div>
+
+    <div class="test-section">
+      <h2>Información Técnica</h2>
+      <p><strong>Archivos:</strong></p>
+      <ul>
+        <li>page-transitions.js - Script principal</li>
+        <li>PAGE_TRANSITIONS_README.md - Documentación</li>
+      </ul>
+      <p><strong>Estilos de transición disponibles:</strong></p>
+      <ul>
+        <li><code>fade</code> - Solo desvanecimiento</li>
+        <li><code>slide</code> - Deslizamiento desde arriba</li>
+        <li><code>fade-slide</code> - Combinación (actual)</li>
+        <li><code>zoom</code> - Efecto de zoom</li>
+      </ul>
+    </div>
+
+    <div class="test-section">
+      <h2>Consola del Navegador</h2>
+      <p>Abre DevTools (F12) y ve la consola. Deberías ver:</p>
+      <code>✅ Page Transitions initialized</code>
+    </div>
+  </div>
+
+  <script>
+    // Verificar que el sistema está cargado
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('page-transition-overlay');
+      if (overlay) {
+        console.log('✅ Page Transitions: Overlay detectado');
+        const statusDiv = document.getElementById('status');
+        statusDiv.textContent = '✅ Sistema completamente funcional';
+        statusDiv.classList.add('ok');
+      } else {
+        console.warn('⚠️ Overlay no encontrado');
+        const statusDiv = document.getElementById('status');
+        statusDiv.className = 'status warning';
+        statusDiv.textContent = '⚠️ Verifica que page-transitions.js esté cargado';
+      }
+    });
+  </script>
+</body>
+</html>
+
+

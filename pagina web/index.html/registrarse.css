@@ -1,0 +1,177 @@
+﻿body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0b0f0c;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding-top: 80px; /* Ajuste para el navbar fijo */
+}
+
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  padding: 20px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #9eff00;
+}
+
+.navbar nav a {
+  color: white;
+  text-decoration: none;
+  margin-left: 25px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.navbar nav a:hover {
+  color: #9eff00;
+}
+
+/* CONTENEDOR */
+.register-container {
+  width: 100%;
+  padding: 20px;
+}
+
+/* CAJA */
+.register-box {
+  max-width: 400px;
+  margin: auto;
+  background: #121212;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+  text-align: center;
+}
+
+.register-box h1 {
+  color: #39ff14;
+  margin-bottom: 10px;
+}
+
+.register-box p {
+  color: #bbb;
+  margin-bottom: 25px;
+}
+
+/* INPUTS */
+form input {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: 1px solid #2c2c2c;
+  background: #1c1c1c;
+  color: white;
+  outline: none;
+}
+
+form input:focus {
+  border: 1px solid #39ff14;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.4);
+}
+
+/* CONTENEDOR DE CONTRASEÑA */
+.password-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+.password-container input {
+  flex: 1;
+  margin-bottom: 0;
+  padding-right: 45px;
+}
+
+.toggle-password-btn {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  padding: 0;
+  width: auto;
+  height: auto;
+  transition: 0.2s;
+}
+
+.toggle-password-btn:hover {
+  transform: scale(1.2);
+}
+
+/* BOTÓN */
+form button {
+  width: 100%;
+  padding: 14px;
+  background: #39ff14;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background: #2ed80f;
+}
+
+/* LINEA */
+.linea {
+  margin: 20px 0;
+  color: #888;
+}
+
+/* GOOGLE */
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.google-btn img {
+  width: 20px;
+}
+
+.google-btn:hover {
+  background: #ddd;
+}
+
+/* TEXTO EXTRA */
+.extra {
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+
+.extra a {
+  color: #39ff14;
+  text-decoration: none;
+}

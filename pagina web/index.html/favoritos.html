@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    NOVABOOK | Favoritos
+  </title>
+
+  <!-- PAGE TRANSITIONS -->
+  <script src="./page-transitions.js"></script>
+
+  <!-- CSS PRINCIPAL -->
+  <link
+    rel="stylesheet"
+    href="./index.css"
+  />
+
+  <!-- CSS NOVALINK -->
+  <link
+    rel="stylesheet"
+    href="./novalink.css"
+  />
+  <link
+    rel="stylesheet"
+    href="./chatbot.css"
+  />
+  <style>
+    .seccion-lista {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .seccion-lista h2 {
+      color: #39ff14;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+    }
+
+    .lista-libros {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .libro-item {
+      background: #1c1c1c;
+      border: 1px solid #39ff14;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .libro-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 15px rgba(57, 255, 20, 0.3);
+    }
+
+    .libro-item img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .libro-item-info {
+      padding: 12px;
+      text-align: center;
+    }
+
+    .libro-item-info h3 {
+      color: #39ff14;
+      margin: 8px 0;
+      font-size: 0.95rem;
+    }
+
+    .libro-item-info p {
+      color: #bbb;
+      font-size: 0.85rem;
+      margin: 5px 0;
+    }
+
+    .btn-eliminar {
+      background: #ff4444;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      transition: 0.3s;
+    }
+
+    .btn-eliminar:hover {
+      background: #cc0000;
+    }
+
+    .vacio-mensaje {
+      text-align: center;
+      color: #bbb;
+      padding: 40px 20px;
+      font-size: 1.1rem;
+    }
+
+    .btn-volver {
+      display: inline-block;
+      margin: 20px auto;
+      padding: 12px 24px;
+      background: #39ff14;
+      color: black;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .btn-volver:hover {
+      background: #2ed80f;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="logo">📚 Novabook</div>
+    <nav>
+      <a href="./index.php">Inicio</a>
+      <a href="./libros.html">Libros</a>
+      <a href="./comentarios.html">Comentarios</a>
+      <a href="./contactanos.html">Contacto</a>
+      <a href="./para_leer_despues.html">Para leer después</a>
+      <a href="./iniciar sesion.html">Iniciar sesión</a>
+      <a href="./registrarse.html">Registrarse</a>
+    </nav>
+  </header>
+
+  <main class="seccion-lista">
+    <h2>⭐ Mis favoritos</h2>
+    <p style="text-align: center; color: #bbb;">Aquí están todos tus libros favoritos guardados</p>
+
+    <div id="favoritesList" class="lista-libros"></div>
+  </main>
+
+  <footer class="footer" style="margin-top: 40px; padding: 20px; text-align: center; border-top: 1px solid #39ff14;">
+    <p>© 2026 Novabooks | Diseñado por Sofia Castillo y Kevin Granados 📚</p>
+  </footer>
+  <script src="./navbar-scroll.js"></script>
+
+  <script src="./chatbot-data.js"></script>
+  <script src="./chatbot.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const listDiv = document.getElementById('favoritesList');
+      const favorites = JSON.parse(localStorage.getItem('novabook_favorites') || '[]');
+
+      if (favorites.length === 0) {
+        listDiv.innerHTML = '<div class="vacio-mensaje" style="grid-column: 1/-1;">No tienes favoritos aún. <br><br><a href="./libros.html" class="btn-volver">Ir a libros</a></div>';
+        return;
+      }
+
+      favorites.forEach(libro => {
+        const div = document.createElement('div');
+        div.className = 'libro-item';
+        div.innerHTML = `
+          <img src="${libro.img}" alt="${libro.titulo}" onerror="this.src='./imagenes/placeholder.jpg'">
+          <div class="libro-item-info">
+            <h3>${libro.titulo}</h3>
+            <p>${libro.autor}</p>
+            <button class="btn-eliminar" data-titulo="${libro.titulo}">Eliminar</button>
+          </div>
+        `;
+        
+        const btnEliminar = div.querySelector('.btn-eliminar');
+        btnEliminar.addEventListener('click', () => {
+          const updatedList = favorites.filter(item => item.titulo !== libro.titulo);
+          localStorage.setItem('novabook_favorites', JSON.stringify(updatedList));
+          location.reload();
+        });
+
+        listDiv.appendChild(div);
+      });
+    });
+  </script>
+
+</body>
+
+</html>
+
+

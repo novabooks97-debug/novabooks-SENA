@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <title>
+    NOVABOOK | Comentarios
+  </title>
+
+  <!-- PAGE TRANSITIONS -->
+  <script src="./page-transitions.js"></script>
+
+  <!-- CSS PRINCIPAL -->
+  <link
+    rel="stylesheet"
+    href="./index.css"
+  />
+
+  <!-- CSS NOVALINK -->
+  <link
+    rel="stylesheet"
+    href="./novalink.css"
+  />
+  <link
+    rel="stylesheet"
+    href="./chatbot.css"
+  />
+  <link rel="stylesheet" href="./comentarios.css">
+
+</head>
+<body class="comentarios-page">
+
+  <header class="navbar">
+    <div class="logo">📚 Novabook</div>
+    <nav>
+      <a href="./index.php">Inicio</a>
+      <a href="./libros.html">Libros</a>
+      <a href="./comentarios.html">Comentarios</a>
+      <a href="./contactanos.html">Contacto</a>
+      <a href="./favoritos.html">Favoritos</a>
+      <a href="./para_leer_despues.html">Para leer después</a>
+      <a href="./iniciar sesion.html">iniciar sesion</a>
+      <a href="./registrarse.html">registrarse</a>
+    </nav>
+  </header>
+
+  <main class="seccion comentarios-page">
+    <section id="formularioSection" class="formulario-comentario">
+      <h2 class="comentarios-title">Comentarios</h2>
+      <p class="comentarios-intro">Cuéntanos tu opinión sin cambiar el estilo del sitio.</p>
+      <form id="comentarioForm">
+        <label>¿Cómo te llamas? / Tu apodo</label>
+        <input type="text" name="nombre" placeholder="Tu nombre o apodo" required>
+
+        <label>Tu correo electrónico (No se publicará)</label>
+        <input type="email" name="email" placeholder="nombre@ejemplo.com" required>
+
+        <label>Dinos tu opinión en general</label>
+        <textarea name="opinion" placeholder="Escribe tu opinión aquí..." rows="6" required></textarea>
+
+        <button type="submit" class="btn-principal">Publicar comentario</button>
+      </form>
+    </section>
+
+    <section class="comentarios-lista">
+      <h3 class="comentarios-lista-titulo">Comentarios publicados</h3>
+      <div id="comentariosContainer" class="comentarios-container">
+        <p class="comentarios-vacio">No hay comentarios aún. Sé el primero en publicar uno.</p>
+      </div>
+    </section>
+
+    <!-- Botón de borrar todos eliminado por petición del usuario -->
+  </main>
+
+  <div id="bottomBar" class="bottom-bar hidden">
+    <button id="btnReabrirForm" class="btn-secundario">Dejar otro comentario</button>
+  </div>
+
+  <footer class="footer" style="padding:20px 8%; text-align:center;">
+    <p>© 2026 Novabooks | Diseñado por Sofia Castillo y Kevin Granados 📚</p>
+  </footer>
+
+  <script>
+    (function(){
+      const form = document.getElementById('comentarioForm');
+      const formSection = document.getElementById('formularioSection');
+      const bottomBar = document.getElementById('bottomBar');
+      const btnReabrirForm = document.getElementById('btnReabrirForm');
+      const container = document.getElementById('comentariosContainer');
+      const storageKey = 'novabookComentarios';
+      const userIdKey = 'novabookUserId';
+
+      function getLocalUserId(){
+        let id = localStorage.getItem(userIdKey);
+        if (!id) {
+          id = 'u_' + Date.now() + '_' + Math.floor(Math.random() * 900000 + 100000);
+          localStorage.setItem(userIdKey, id);
+        }
+        return id;
+      }
+
+      const localUserId = getLocalUserId();
+
+      function cargarComentarios(){
+
+        const datos = localStorage.getItem(storageKey);
+        return datos ? JSON.parse(datos) : [];
+      }
+
+      function guardarComentarios(comentarios){
+        localStorage.setItem(storageKey, JSON.stringify(comentarios));
+      }
+
+      function crearComentarioHTML(comentario){
+        const card = document.createElement('article');
+        card.className = 'comentario-card';
+
+        // Avatar y header
+        const headerTop = document.createElement('div');
+        headerTop.className = 'comentario-header-top';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'comentario-avatar';
+        const primeraLetra = (comentario.nombre || 'A')[0].toUpperCase();
+        avatar.textContent = primeraLetra;
+        headerTop.appendChild(avatar);
+
+        const headerInfo = document.createElement('div');
+        headerInfo.className = 'comentario-header-info';
+
+        const nombre = document.createElement('strong');
+        nombre.className = 'comentario-nombre';
+        nombre.textContent = comentario.nombre || 'Anónimo';
+        headerInfo.appendChild(nombre);
+
+        const fecha = document.createElement('span');
+        fecha.className = 'comentario-fecha';
+        const fechaObj = new Date(comentario.fecha);
+        fecha.textContent = fechaObj.toLocaleDateString('es-ES', { 
+          year: 'numeric', 
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        headerInfo.appendChild(fecha);
+
+        headerTop.appendChild(headerInfo);
+
+        const header = document.createElement('div');
+        header.className = 'comentario-header';
+        header.appendChild(headerTop);
+
+        // acciones (borrar individual) — solo mostrar botón si el comentario pertenece al usuario local
+        if (comentario.ownerId && comentario.ownerId === localUserId) {
+          const acciones = document.createElement('div');
+          acciones.className = 'comentario-acciones';
+          const borrarBtn = document.createElement('button');
+          borrarBtn.type = 'button';
+          borrarBtn.className = 'delete-btn';
+          borrarBtn.title = 'Eliminar tu comentario';
+          borrarBtn.innerText = '✕';
+          acciones.appendChild(borrarBtn);
+          header.appendChild(acciones);
+
+          // eliminar comentario individualmente usando la propiedad fecha como id
+          borrarBtn.addEventListener('click', function(){
+            if(!confirm('¿Eliminar este comentario?')) return;
+            const comentarios = cargarComentarios();
+            const filtrados = comentarios.filter(c => c.fecha !== comentario.fecha);
+            guardarComentarios(filtrados);
+            renderComentarios();
+            actualizarVisibilidad();
+          });
+        }
+
+        const texto = document.createElement('p');
+        texto.textContent = comentario.opinion;
+
+        card.appendChild(header);
+        card.appendChild(texto);
+
+
+
+        return card;
+      }
+
+      function actualizarVisibilidad(){
+        const comentarios = cargarComentarios();
+        const tieneComentarios = comentarios.length > 0;
+        if (tieneComentarios) {
+          formSection.classList.add('hidden');
+          formSection.hidden = true;
+          formSection.style.display = 'none';
+          bottomBar.classList.remove('hidden');
+          bottomBar.hidden = false;
+          bottomBar.style.display = 'flex';
+        } else {
+          formSection.classList.remove('hidden');
+          formSection.hidden = false;
+          formSection.style.display = '';
+          bottomBar.classList.add('hidden');
+          bottomBar.hidden = true;
+          bottomBar.style.display = 'none';
+        }
+      }
+
+      function renderComentarios(){
+        const comentarios = cargarComentarios();
+        container.innerHTML = '';
+
+        if (!comentarios.length) {
+          const vacio = document.createElement('p');
+          vacio.className = 'comentarios-vacio';
+          vacio.textContent = 'No hay comentarios aún. Sé el primero en publicar uno.';
+          container.appendChild(vacio);
+          return;
+        }
+
+        comentarios.slice().reverse().forEach(comentario => {
+          container.appendChild(crearComentarioHTML(comentario));
+        });
+      }
+
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        const formData = new FormData(form);
+        const nuevoComentario = {
+          nombre: formData.get('nombre').trim(),
+          email: formData.get('email').trim(),
+          opinion: formData.get('opinion').trim(),
+          ownerId: localUserId,
+          fecha: new Date().toISOString()
+        };
+
+        const comentarios = cargarComentarios();
+        comentarios.push(nuevoComentario);
+        guardarComentarios(comentarios);
+        renderComentarios();
+        form.reset();
+        actualizarVisibilidad();
+      });
+
+      btnReabrirForm.addEventListener('click', function(){
+        formSection.classList.remove('hidden');
+        formSection.hidden = false;
+        formSection.style.display = '';
+        bottomBar.classList.add('hidden');
+        bottomBar.hidden = true;
+        bottomBar.style.display = 'none';
+        form.scrollIntoView({ behavior: 'smooth' });
+      });
+
+      // El botón de "Borrar todos los comentarios" fue removido por petición del usuario.
+
+      renderComentarios();
+      actualizarVisibilidad();
+    })();
+  </script> 
+    </script>
+  <script src="./navbar-scroll.js"></script>
+
+      <script src="./chatbot-data.js"></script>
+      <script src="./chatbot.js"></script>
+  
+</body>
+</html>
+
